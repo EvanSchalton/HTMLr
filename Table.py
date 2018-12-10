@@ -32,7 +32,7 @@ def enricher(elem_cls):
 class Table(HTMLObject):
     css = {"style": [], "id": None, "class": [], "mixins":{}}
     tag = "table"
-    inner_string = ""
+    innerText = ""
     parent=None
 
     def __init__(self, dataframe, table_id=None, index_name = "No."):
@@ -52,7 +52,7 @@ class Table(HTMLObject):
         # Build Body
         self.children.append(TableHB(dataframe.values.tolist(), self.kwargs))
 
-    def inner_str(self, enricher=None):
+    def innerTxt(self, enricher=None):
         return "\n".join([HTMLRender.get_html(c_comp, enricher) for c_comp in self.children])
 
     def get_html(self, enricher=None):
@@ -60,7 +60,7 @@ class Table(HTMLObject):
 
 class TableHB(HTMLObject):
     css = {"style": [], "id": None, "class": [], "mixins":{}}
-    inner_string = ""
+    innerText = ""
     parent=None
 
     def __init__(self, lst, kwargs):
@@ -71,13 +71,13 @@ class TableHB(HTMLObject):
         if self.tag == "thead": lst = [lst]
         self.children = [TableRow(index, c_lst, self.kwargs) for index, c_lst in enumerate(lst)]
 
-    def inner_str(self, enricher=None):
+    def innerTxt(self, enricher=None):
         return "\n".join([HTMLRender.get_html(c_row, enricher) for c_row in self.children])
 
 class TableRow(HTMLObject):
     css = {"style": [], "id": None, "class": [], "mixins":{}}
     tag = "tr"
-    inner_string = ""
+    innerText = ""
     parent=None
 
     def __init__(self, row_num, lst, kwargs):
@@ -86,27 +86,27 @@ class TableRow(HTMLObject):
         if isinstance(lst, str): lst = [lst]
         self.row_num = row_num
         if kwargs["table_type"]== "thead":
-            self.children = [TableCell(col_num=0, inner_string=self.kwargs["index_name"], kwargs=self.kwargs)]
+            self.children = [TableCell(col_num=0, innerText=self.kwargs["index_name"], kwargs=self.kwargs)]
         else:
-            self.children = [TableCell(col_num=0, inner_string=row_num, kwargs=self.kwargs)]
+            self.children = [TableCell(col_num=0, innerText=row_num, kwargs=self.kwargs)]
         self.children += [TableCell(col_num+1, cell_value, self.kwargs) for col_num, cell_value in enumerate(lst)]
 
-    def inner_str(self, enricher=None):
+    def innerTxt(self, enricher=None):
         return "\n".join([HTMLRender.get_html(c_cell, enricher) for c_cell in self.children])
 
 class TableCell(HTMLObject):
     css = {"style": [], "id": None, "class": [], "mixins":{}}
     children = []
     parent=None
-    def __init__(self, col_num, inner_string, kwargs):
+    def __init__(self, col_num, innerText, kwargs):
         self.kwargs = kwargs.copy()
         self.kwargs["col_num"] = col_num
         self.tag = "td" if kwargs["table_type"] == "tbody" else "th"
-        self.inner_string = inner_string
-        self.kwargs["inner_string"] = inner_string
+        self.innerText = innerText
+        self.kwargs["innerText"] = innerText
         self += {"class": ["field:{}".format(self.kwargs["index_to_column"][col_num])]}
 
-    def inner_str(self, enricher=None):
+    def innerTxt(self, enricher=None):
         if self.children:
-            return str(self.inner_string) + "\n".join([child.get_html(enricher) for child in self.children])
-        return self.inner_string
+            return str(self.innerText) + "\n".join([child.get_html(enricher) for child in self.children])
+        return self.innerText

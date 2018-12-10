@@ -10,7 +10,7 @@ def ComboButton(button_string, combo_list, breaks=None, enricher=None):
         css={"class":["btn", "btn-default", "dropdown-toggle"],
              "mixins":{"type":"button", "data-toggle":"dropdown"},
              "id":"menu1"},
-        inner_string=button_string,
+        innerText=button_string,
     )
 
     button.append(HTMLObject(tag="span", css={"class":["caret"]}))
@@ -27,8 +27,8 @@ def ComboButton(button_string, combo_list, breaks=None, enricher=None):
     lst.children = [HTMLObject(
         tag="li",
         css={"mixins":{"role":"presentation"}},
-        children=[HTMLObject(tag="a", css={"mixins":{"role":"menuitem", "tabindex":"-1", "href":url}}, inner_string=inner_str)]
-    ) for (url, inner_str) in combo_list]
+        children=[HTMLObject(tag="a", css={"mixins":{"role":"menuitem", "tabindex":"-1", "href":url}}, innerText=innerText)]
+    ) for (url, innerText) in combo_list]
 
     if breaks:
         for c_break in breaks:
@@ -44,14 +44,14 @@ def ComboButton(button_string, combo_list, breaks=None, enricher=None):
 
 def ComboInput(list_name, option_list=[], label=None):
     if label:
-        ComboInput = HTMLObject(tag='label',css={'class':['inputLabel']}, inner_string=label)
+        ComboInput = HTMLObject(tag='label',css={'class':['inputLabel']}, innerText=label)
     else:
         ComboInput = HTMLObject()
 
     input = HTMLObject(tag='input', css={'mixins':{'type':'text', 'list':list_name}})
     ComboInput.append(input)
 
-    list_items = [HTMLObject(tag='option',css={'mixins':{'value':option}}, inner_string=option) for option in option_list]
+    list_items = [HTMLObject(tag='option',css={'mixins':{'value':option}}, innerText=option) for option in option_list]
     datalist = HTMLObject(tag='datalist', css={'id':list_name}, children=list_items)
 
     ComboInput.append(datalist)

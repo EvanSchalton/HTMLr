@@ -1,9 +1,13 @@
 class HTMLObject:
-    def __init__(self, tag = "div", css = {"style": [], "id": None, "class": [], "mixins":{}}, inner_string = "", children= [], span=None):
+    def __init__(self, tag = "div", css = {"style": [], "id": None, "class": [], "mixins":{}}, innerText = "", children= [], span=None, **kwargs):
+        self.kwargs = kwargs
         self.tag = tag
         self.css = css
+        cssKeys = ["style", "id", "klass", "mixins"]
         self +=  {"style": [], "id": None, "class": [], "mixins":{}}
-        self.inner_string = inner_string
+        self += {k.replace("klass", "class"):v for (k, v) in kwargs.items() if k in cssKeys}
+        self += {"mixins":{k:v for (k,v) in kwargs.items() if k not in cssKeys}}
+        self.innerText = innerText
         self.children = children
         if self.children:
             for child in self.children:
@@ -23,6 +27,8 @@ class HTMLObject:
             else:
                 if isinstance(v, list):
                     try:
+                        if isinstance(reduced_css[k], str):
+                            reduced_css[k] = [reduced_css[k]]
                         reduced_css[k]+=v
                         reduced_css[k] = list(set(reduced_css[k]))
                     except Exception as e:
@@ -45,10 +51,10 @@ class HTMLObject:
         for child in self.children:
             child.parent = self
 
-    def inner_str(self, enricher=None):
+    def innerTxt(self, enricher=None):
         if self.children:
-            return self.inner_string + "\n".join([child.get_html(enricher) for child in self.children])
-        return self.inner_string
+            return self.innerText + "\n".join([child.get_html(enricher) for child in self.children])
+        return self.innerText
 
     def get_html(self, enricher=None):
         return HTMLRender.get_html(self, enricher)
@@ -80,7 +86,7 @@ class HTMLObject:
     # def copy(self, cls_elem, children=True):
     #     self.tag = cls_elem.tag
     #     self.css = cls_elem.css
-    #     self.inner_string = cls_elem.inner_string
+    #     self.innerText = cls_elem.innerText
     #     if children: self.children = cls_elem.children
     #
     # def enrich(self, enricher):
@@ -129,9 +135,9 @@ class HTMLRender:
 
         prefix_tags = ["input", "br"]
         if elem_cls.tag.lower() in prefix_tags:
-            return "{2}<{0}{1}>".format(elem_cls.tag, attrs, elem_cls.inner_str(enricher))
+            return "{2}<{0}{1}>".format(elem_cls.tag, attrs, elem_cls.innerTxt(enricher))
         else:
-            return "<{0}{1}>{2}</{0}>".format(elem_cls.tag, attrs, elem_cls.inner_str(enricher))
+            return "<{0}{1}>{2}</{0}>".format(elem_cls.tag, attrs, elem_cls.innerTxt(enricher))
 
 
 def spanify(layout_dict):
