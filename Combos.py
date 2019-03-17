@@ -1,59 +1,59 @@
 from HTMLr.Core import HTMLObject
 
-def ComboButton(button_string, combo_list, breaks=None, enricher=None):
-    container = HTMLObject(css={"class":["container"]})
+def ComboButton(HTMLObject):
 
-    dropdown = HTMLObject(css={"class":["dropdown"]})
+    def __init__(self, button_string, combo_list, breaks=None):
+        super().__init__(klass="container")
 
-    button = HTMLObject(
-        tag="button",
-        css={"class":["btn", "btn-default", "dropdown-toggle"],
-             "mixins":{"type":"button", "data-toggle":"dropdown"},
-             "id":"menu1"},
-        innerText=button_string,
-    )
+        dropdown = HTMLObject(css={"class":["dropdown"]})
 
-    button.append(HTMLObject(tag="span", css={"class":["caret"]}))
+        button = HTMLObject(
+            tag="button",
+            css={"class":["btn", "btn-default", "dropdown-toggle"],
+                 "mixins":{"type":"button", "data-toggle":"dropdown"},
+                 "id":"menu1"},
+            innerText=button_string,
+        )
 
-    dropdown.append(button)
+        button.append(HTMLObject(tag="span", css={"class":["caret"]}))
 
-    lst = HTMLObject(
-        tag="ul",
-        css={
-            "class":["dropdown-menu"],
-            "mixins":{"role":"menu", "aria-labelledby":"menu1"}
-        })
+        dropdown.append(button)
 
-    lst.children = [HTMLObject(
-        tag="li",
-        css={"mixins":{"role":"presentation"}},
-        children=[HTMLObject(tag="a", css={"mixins":{"role":"menuitem", "tabindex":"-1", "href":url}}, innerText=innerText)]
-    ) for (url, innerText) in combo_list]
+        lst = HTMLObject(
+            tag="ul",
+            css={
+                "class":["dropdown-menu"],
+                "mixins":{"role":"menu", "aria-labelledby":"menu1"}
+            })
 
-    if breaks:
-        for c_break in breaks:
-            lst.children.insert(c_break, HTMLObject(tag="li", css={"mixins":{"role":"presentation"}, "class":["divider"]}))
+        lst.children = [HTMLObject(
+            tag="li",
+            css={"mixins":{"role":"presentation"}},
+        ) for txt in combo_list]
+#             children=[HTMLObject(tag="a", css={"mixins":{"role":"menuitem", "tabindex":"-1", "href":url}}, innerText=innerText)]
+#         ) for (url, innerText) in combo_list]
 
-    dropdown.append(lst)
+        if breaks:
+            for c_break in breaks:
+                lst.children.insert(c_break, HTMLObject(tag="li", css={"mixins":{"role":"presentation"}, "class":["divider"]}))
 
-    container.append(dropdown)
+        dropdown.append(lst)
 
-    return container.get_html(enricher=enricher)
+        self.append(dropdown)
 
 #creates box that allows user input and dropdown options
 
-def ComboInput(list_name, option_list=[], label=None):
-    if label:
-        ComboInput = HTMLObject(tag='label',css={'class':['inputLabel']}, innerText=label)
-    else:
-        ComboInput = HTMLObject()
+class Combo(HTMLObject):
+    def __init__(self, list_name, option_list=[], label=None):
+        if label:
+            super().__init__(tag='label',css={'class':['inputLabel']}, innerText=label)
+        else:
+            super().__init__()
 
-    input = HTMLObject(tag='input', css={'mixins':{'type':'text', 'list':list_name}})
-    ComboInput.append(input)
+        input = HTMLObject(tag='input', css={'mixins':{'type':'text', 'list':list_name}})
+        self.append(input)
 
-    list_items = [HTMLObject(tag='option',css={'mixins':{'value':option}}, innerText=option) for option in option_list]
-    datalist = HTMLObject(tag='datalist', css={'id':list_name}, children=list_items)
+        list_items = [HTMLObject(tag='option',css={'mixins':{'value':option}}, innerText=option) for option in option_list]
+        datalist = HTMLObject(tag='datalist', css={'id':list_name}, children=list_items)
 
-    ComboInput.append(datalist)
-
-    return ComboInput
+        self.append(datalist)

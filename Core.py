@@ -1,36 +1,60 @@
-class HTMLObject:
-    def __init__(self, tag = "div", css = {"style": [], "id": None, "class": [], "mixins":{}}, innerText = "", children= [], span=None, **kwargs):
+class HTMLObject(object):
+    cssKeys = {"style":[], "id":"", "klass":[], "mixins":{}, "class":[]}
+    def __init__(self, tag = "div", css = {"style": [], "id": None, "class": [], "mixins":{}}, innerText = "", children= [], span=None, parent=None, **kwargs):
         self.kwargs = kwargs
         self.tag = tag
         self.css = css
-        cssKeys = ["style", "id", "klass", "mixins"]
         self +=  {"style": [], "id": None, "class": [], "mixins":{}}
-        self += {k.replace("klass", "class"):v for (k, v) in kwargs.items() if k in cssKeys}
-        self += {"mixins":{k:v for (k,v) in kwargs.items() if k not in cssKeys}}
+        self += {k.replace("klass", "class"):v for (k, v) in kwargs.items() if k in self.cssKeys}
+        self += {"mixins":{k:v for (k,v) in kwargs.items() if k not in self.cssKeys}}
         self.innerText = innerText
         self.children = children
         if self.children:
             for child in self.children:
                 child.parent = self
 
-        self.parent = None
+        self.parent = parent
         # self.parent_enricher = []
         # self.enricher = []
         self.span = span
+
+    def __getattr__(self, attr):
+        # print("getattr:", attr)
+        if attr in self.cssKeys:
+            if attr == "klass":
+                attr="class"
+            return self.css.get(attr, self.cssKeys[attr])
+        else:
+            raise AttributeError
+
+    def __setattr__(self, attr, value):
+        # print("setattr:", attr, "=", value)
+        if attr in self.cssKeys:
+            if attr == "klass":
+                attr="class"
+            if attr in ["klass", "style", "class"] and isinstance(value, str):
+                value = [value]
+            self += {attr:value}
+            #elif attr not in ["args", "kwargs"]:
+        else:
+            super().__setattr__(attr, value)
 
     def __add__(self, css):
         new_css = {}
         reduced_css = {k:v for (k,v) in self.css.items() if v}
         for k,v in css.items():
             if k not in reduced_css:
-                reduced_css[k] = v
+                if k in self.cssKeys:
+                    reduced_css[k] = v
+                elif isinstance(v, str):
+                    reduced_css['mixins'] = {**reduced_css['mixins'], **{k, v}}
             else:
                 if isinstance(v, list):
                     try:
                         if isinstance(reduced_css[k], str):
                             reduced_css[k] = [reduced_css[k]]
                         reduced_css[k]+=v
-                        reduced_css[k] = list(set(reduced_css[k]))
+                        reduced_css[k] = list(dict.fromkeys(reduced_css[k]))
                     except Exception as e:
                         print("Key: '{}'".format(k), "Current Value: '{}'".format(reduced_css[k]), "New Value: '{}'".format(v))
                         raise e
