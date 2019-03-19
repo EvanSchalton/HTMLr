@@ -3,7 +3,7 @@ from HTMLr.Core import HTMLObject
 def ComboButton(HTMLObject):
 
     def __init__(self, button_string, combo_list, breaks=None):
-        super().__init__(klass="container")
+        super(ComboButton, self).__init__(klass="container")
 
         dropdown = HTMLObject(css={"class":["dropdown"]})
 

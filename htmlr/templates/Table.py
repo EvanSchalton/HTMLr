@@ -36,7 +36,7 @@ class Table(HTMLObject):
     # parent=None
 
     def __init__(self, dataframe, table_id=None, index_name = "No."):
-        super().__init__(self, tag = "table")
+        super(Table, self).__init__(self, tag = "table")
         self.kwargs = {"header":True, "index":True, "table_id":table_id, "index_name":index_name}
 
         self.children = []
@@ -65,7 +65,7 @@ class TableHB(HTMLObject):
     # parent=None
 
     def __init__(self, lst, kwargs):
-        super().__init__(self, tag = "tbody" if all([isinstance(i, list) for i in lst]) else "thead")
+        super(TableHB, self).__init__(self, tag = "tbody" if all([isinstance(i, list) for i in lst]) else "thead")
         self.kwargs = kwargs.copy()
         self.kwargs["table_type"] = self.tag
         #if index, element in enumerate(lst):
@@ -82,7 +82,7 @@ class TableRow(HTMLObject):
     # parent=None
 
     def __init__(self, row_num, lst, kwargs):
-        super().__init__(self, tag = "tr")
+        super(TableRow, self).__init__(self, tag = "tr")
         self.kwargs = kwargs.copy()
         self.kwargs["row_num"] = row_num
         if isinstance(lst, str): lst = [lst]
@@ -101,7 +101,7 @@ class TableCell(HTMLObject):
     # children = []
     # parent=None
     def __init__(self, col_num, innerText, kwargs):
-        super().__init__(self, tag = "td" if kwargs["table_type"] == "tbody" else "th")
+        super(TableCell, self).__init__(self, tag = "td" if kwargs["table_type"] == "tbody" else "th")
         self.kwargs = kwargs.copy()
         self.kwargs["col_num"] = col_num
         self.innerText = innerText

@@ -3,7 +3,7 @@ import warnings
 
 class HTMLObject(object):
     cssKeys = {"style":[], "id":"", "klass":[], "mixins":{}, "class":[]}
-    def __init__(self, tag = "div", css = {"style": [], "id": None, "class": [], "mixins":{}}, innerText = "", children= [], span=None, parent=None, **kwargs):
+    def __init__(self, tag = "div", innerText = "", css = {"style": [], "id": None, "class": [], "mixins":{}}, children= [], span=None, parent=None, **kwargs):
         self.kwargs = kwargs
         self.tag = tag
         self.css = css
