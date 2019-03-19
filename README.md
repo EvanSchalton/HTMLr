@@ -1,2 +1,28 @@
 # HTMLr
 Python HTML Enricher
+
+HTMLObject
+  - create HTML objects on the fly
+  - initiate with tag, innerText, children and css hooks
+  - pass css in a dictionary of {"style": [], "id": None, "class": [], "mixins":{}},
+  - also supports kwargs:
+    - klass
+    - mixins
+    - id
+    - style
+  - Nest with children objects
+  - span parameter for adding bootstrap col dims (col-3 / 3, col-md-*, etc.)
+  
+  methods:
+   - easily add additional css (custom iadd and add methods for merging css dicts)
+   - get_html(enricher) returns HTML string
+   - append to add additional children
+
+HTMLRender
+  - renders html from HTMLObjects
+  - makes use of enrichers
+    - enrichers are conditional HTMLObject decorators
+    
+HTMLObject(tag="a",  mixins={"href":"https://github.com/EvanSchalton/HTMLr.git"}, innerText="Click Me")
+HTMLObject.get_html()
+# <a href="https://github.com/EvanSchalton/HTMLr.git">Click Me</a>
