@@ -1,6 +1,6 @@
-from HTMLr.Core import HTMLObject
+from HTMLr.core import HTMLObject
 
-class card(HTMLObject):
+class Card(HTMLObject):
     def __init__(self, header=None, body=None, footer=None):
         super(card, self).__init__(klass = "card")
         if header:

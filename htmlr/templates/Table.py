@@ -1,5 +1,5 @@
 import pandas as pd
-from HTMLr.Core import HTMLObject, HTMLRender
+from HTMLr.core import HTMLObject, HTMLRender
 
 def enricher(elem_cls):
 
