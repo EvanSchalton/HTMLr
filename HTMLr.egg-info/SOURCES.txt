@@ -1,0 +1,8 @@
+README.md
+setup.py
+HTMLr/__init__.py
+HTMLr/core.py
+HTMLr.egg-info/PKG-INFO
+HTMLr.egg-info/SOURCES.txt
+HTMLr.egg-info/dependency_links.txt
+HTMLr.egg-info/top_level.txt
