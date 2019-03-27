@@ -3,7 +3,7 @@ from HTMLr.core import HTMLObject, HTMLRender
 
 def enricher(elem_cls):
 
-    if elem_cls.tag = "table" or "table" in elem_cls.klass:
+    if elem_cls.tag == "table" or "table" in elem_cls.klass:
         elem_cls += {"class":["table", "sortable-table", "table-striped", "table-bordered"]}
 
     elif isinstance(elem_cls, TableRow):
