@@ -1,4 +1,4 @@
-from ..core import HTMLObject
+from HTMLr.core import HTMLObject
 
 class Card(HTMLObject):
     def __init__(self, header=None, body=None, footer=None):
