@@ -1,4 +1,4 @@
-from HTMLr.core import HTMLObject
+from .core import HTMLObject
 
 def ComboButton(HTMLObject):
 

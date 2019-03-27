@@ -1,6 +1,5 @@
 import warnings
 
-
 class HTMLObject(object):
     cssKeys = {"style":[], "id":"", "klass":[], "mixins":{}, "class":[]}
     def __init__(self, tag = "div", innerText = "", css = {"style": [], "id": None, "class": [], "mixins":{}}, children= [], span=None, parent=None, **kwargs):
