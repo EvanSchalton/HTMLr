@@ -1,4 +1,4 @@
-from HTMLr.core import HTMLObject, HTMLRender
+from ..core import HTMLObject, HTMLRender
 
 def enricher(elem_cls):
 
