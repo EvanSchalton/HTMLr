@@ -3,7 +3,7 @@ from HTMLr.core import HTMLObject, HTMLRender
 
 def enricher(elem_cls):
 
-    if isinstance(elem_cls, Table):
+    if elem_cls.tag = "table" or "table" in elem_cls.klass:
         elem_cls += {"class":["table", "sortable-table", "table-striped", "table-bordered"]}
 
     elif isinstance(elem_cls, TableRow):
@@ -31,10 +31,6 @@ def enricher(elem_cls):
 
 
 class Table(HTMLObject):
-    # css = {"style": [], "id": None, "class": [], "mixins":{}}
-    # tag = "table"
-    # innerText = ""
-    # parent=None
 
     def __init__(self, dataframe, table_id=None, index_name = "No."):
         super(Table, self).__init__(tag = "table")
@@ -60,14 +56,10 @@ class Table(HTMLObject):
     def get_html(self, enricher=None):
         return HTMLRender.get_html(self, enricher)
 
-class djTable(Table):
-    # css = {"style": [], "id": None, "class": [], "mixins":{}}
-    # tag = "table"
-    # innerText = ""
-    # parent=None
+class djTable(HTMLObject):
 
     def __init__(self, queryset_value_list, excluded_fields = [], table_id=None, index_name = "No."):
-        super(djTable, self).__init__()
+        super(Table, self).__init__(tag = "table")
         self.kwargs = {"header":True, "index":True, "table_id":table_id, "index_name":index_name}
 
         self.children = []

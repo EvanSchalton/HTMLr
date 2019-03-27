@@ -1,3 +1,3 @@
-__version__ = '0.9.6-dev'
+__version__ = '0.9.7-dev'
 # from HTMLr.core import HTMLObject
 # from HTMLr.templates import Card, Combos, Table
