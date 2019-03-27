@@ -1,4 +1,3 @@
-import pandas as pd
 from HTMLr.core import HTMLObject, HTMLRender
 
 def enricher(elem_cls):
@@ -29,29 +28,36 @@ def enricher(elem_cls):
 
     return elem_cls
 
-class Table(HTMLObject):
+class djTable(HTMLObject):
     # css = {"style": [], "id": None, "class": [], "mixins":{}}
     # tag = "table"
     # innerText = ""
     # parent=None
 
-    def __init__(self, dataframe, table_id=None, index_name = "No."):
+    def __init__(self, queryset_value_list, excluded_fields = [], table_id=None, index_name = "No."):
         super(Table, self).__init__(self, tag = "table")
         self.kwargs = {"header":True, "index":True, "table_id":table_id, "index_name":index_name}
 
         self.children = []
         if table_id: self.css["id"] = table_id
-        self.dataframe = dataframe
+        self.queryset = queryset_value_list
+        self.excluded_fields = excluded_fields
 
-        self.kwargs["column_to_index"] = {i:index+1 for index, i in enumerate(dataframe.columns)}
+        if self.queryset:
+            self.columns = [k for k in self.queryset[0] if k not in excluded_fields]
+        else:
+            return
+
+        self.kwargs["column_to_index"] = {i:index+1 for index, i in enumerate(self.columns)}
         self.kwargs["column_to_index"][index_name] = 0
         self.kwargs["index_to_column"] = {v:k for (k, v) in self.kwargs["column_to_index"].items()}
 
         # Build Head
-        self.children = [TableHB(dataframe.columns, self.kwargs)]
+        self.children = [TableHB(self.columns, self.kwargs)]
 
         # Build Body
-        self.children.append(TableHB(dataframe.values.tolist(), self.kwargs))
+
+        self.children.append(TableHB([[row_dict[c_col] for c_col in self.columns] for row_dict in self.queryset], self.kwargs))
 
     def innerTxt(self, enricher=None):
         return "\n".join([HTMLRender.get_html(c_comp, enricher) for c_comp in self.children])

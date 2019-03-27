@@ -2,7 +2,7 @@ from HTMLr.core import HTMLObject
 
 class Card(HTMLObject):
     def __init__(self, header=None, body=None, footer=None):
-        super(card, self).__init__(klass = "card")
+        super(Card, self).__init__(klass = "card")
         if header:
             self.header = header
         else:
