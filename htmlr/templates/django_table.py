@@ -35,7 +35,7 @@ class djTable(HTMLObject):
     # parent=None
 
     def __init__(self, queryset_value_list, excluded_fields = [], table_id=None, index_name = "No."):
-        super(djTable, self).__init__(self, tag = "table")
+        super(djTable, self).__init__(tag = "table")
         self.kwargs = {"header":True, "index":True, "table_id":table_id, "index_name":index_name}
 
         self.children = []
