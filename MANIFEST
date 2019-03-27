@@ -2,3 +2,8 @@
 setup.py
 HTMLr\__init__.py
 HTMLr\core.py
+HTMLr\templates\__init__.py
+HTMLr\templates\card.py
+HTMLr\templates\combos.py
+HTMLr\templates\django_table.py
+HTMLr\templates\pandas_table.py
